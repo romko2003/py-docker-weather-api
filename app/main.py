@@ -43,7 +43,8 @@ def fetch_current_weather(api_key: str, city: str) -> Dict[str, Any]:
     # Проста перевірка на помилку від WeatherAPI
     if isinstance(data, dict) and "error" in data:
         err = data["error"]
-        fatal(f"[error] API error: code={err.get('code')} message={err.get('message')}")
+        fatal(f"[error] API error: code={err.get('code')} "
+              f"message={err.get('message')}")
 
     return data
 
