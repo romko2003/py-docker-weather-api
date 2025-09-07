@@ -1,12 +1,17 @@
-FROM python:3.12-alpine
+# Вимога чекліста: slim-образ
+FROM python:3.10.8-slim
 
-RUN apk add --no-cache ca-certificates && update-ca-certificates
+# Оновлення сертифікатів/базових пакунків мінімально та чисто
+RUN apt-get update \
+ && apt-get install -y --no-install-recommends ca-certificates \
+ && rm -rf /var/lib/apt/lists/*
+
+# Лише потрібна залежність для HTTPS-запитів
 RUN pip install --no-cache-dir requests
 
+# Кладемо код прямо в /app (щоб був /app/main.py, без /app/app)
 WORKDIR /app
-# ⬇️ кладемо main.py прямо у /app
 COPY app/ .
 
-# тепер файл лежить у /app/main.py, тож запускаємо:
+# Запуск (без вимоги до __init__.py)
 CMD ["python", "-m", "main"]
-# (або так: CMD ["python", "main.py"])
