@@ -1,19 +1,12 @@
-# ===== Stage: runtime =====
 FROM python:3.12-alpine
 
-# Встановимо сертифікати для HTTPS
 RUN apk add --no-cache ca-certificates && update-ca-certificates
-
-# Встановимо тільки необхідну залежність
 RUN pip install --no-cache-dir requests
 
-# Створимо робочу директорію та додамо код
 WORKDIR /app
-COPY app/ ./app/
+# ⬇️ кладемо main.py прямо у /app
+COPY app/ .
 
-# Не запускаємо від root (опціонально)
-# RUN adduser -D appuser
-# USER appuser
-
-# Запускаємо наш скрипт
-CMD ["python", "-m", "app.main"]
+# тепер файл лежить у /app/main.py, тож запускаємо:
+CMD ["python", "-m", "main"]
+# (або так: CMD ["python", "main.py"])
